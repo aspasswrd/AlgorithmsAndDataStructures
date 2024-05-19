@@ -1,21 +1,15 @@
 #include <iostream>
+#include <vector>
 
 const int kInt = 100001;
 const int kMagic = 17;
 
 int MinimizeExperiments(int n0, int k0) {
-  int** dp = new int*[k0 + 1];
-  for (int i = 0; i != k0 + 1; ++i) {
-    dp[i] = new int[n0 + 1];
-    for (int j = 0; j != n0 + 1; ++j) {
-      dp[i][j] = kInt;
-    }
-  }
+  std::vector<std::vector<int>> dp(k0 + 1, std::vector<int>(n0 + 1, kInt));
   for (int i = 0; i <= k0; ++i) {
     dp[i][0] = 0;
     dp[i][1] = 0;
   }
-
   for (int i = 1; i <= k0; ++i) {
     for (int j = 2; j <= n0; ++j) {
       int left = 1;
@@ -32,13 +26,7 @@ int MinimizeExperiments(int n0, int k0) {
       }
     }
   }
-
-  int answer = dp[k0][n0];
-  for (int i = 0; i != k0 + 1; ++i) {
-    delete[] dp[i];
-  }
-  delete[] dp;
-  return answer;
+  return dp[k0][n0];
 }
 
 int main() {
@@ -55,12 +43,7 @@ int main() {
     std::cout << 0;
     return 0;
   }
-
   k0 = std::min(k0, kMagic);
-
   int result = MinimizeExperiments(n0, k0);
-
-  std::cout << result << std::endl;
-
-  return 0;
+  std::cout << result << "\n";
 }
