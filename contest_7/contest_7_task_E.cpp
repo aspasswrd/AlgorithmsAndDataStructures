@@ -22,45 +22,45 @@ struct Pair {
 
 struct Graph {
   Graph(int n, int m) : n(n), m(m) {
-    ggg.resize(n + 1);
+    g.resize(n + 1);
     used.resize(n + 1);
-    hhh.resize(n + 1);
-    ddd.resize(n + 1);
+    h.resize(n + 1);
+    d.resize(n + 1);
   }
 
   void AddEdge(int u, int v, int i) {
-    eee.insert({u, v, i + 1});
-    if (ggg[u].contains(v)) {
+    e.insert({u, v, i + 1});
+    if (g[u].contains(v)) {
       doubles.insert({u, v});
       doubles.insert({v, u});
     } else {
-      ggg[u].insert(v);
-      ggg[v].insert(u);
+      g[u].insert(v);
+      g[v].insert(u);
     }
   }
 
   void Dfs(int v, int p = -1) {
     used[v] = true;
     if (p == -1) {
-      hhh[v] = 0;
+      h[v] = 0;
     } else {
-      hhh[v] = hhh[p] + 1;
+      h[v] = h[p] + 1;
     }
-    ddd[v] = hhh[v];
-    for (int uuu : ggg[v]) {
+    d[v] = h[v];
+    for (int uuu : g[v]) {
       if (uuu != p) {
         if (used[uuu]) {
-          ddd[v] = std::min(ddd[v], hhh[uuu]);
+          d[v] = std::min(d[v], h[uuu]);
         } else {
           Dfs(uuu, v);
-          ddd[v] = std::min(ddd[v], ddd[uuu]);
-          if (hhh[v] < ddd[uuu]) {
+          d[v] = std::min(d[v], d[uuu]);
+          if (h[v] < d[uuu]) {
             if (doubles.contains({uuu, v}) || doubles.contains({v, uuu})) {
               continue;
             }
-            auto iter = eee.find({v, uuu});
-            if (iter == eee.end()) {
-              iter = eee.find({uuu, v});
+            auto iter = e.find({v, uuu});
+            if (iter == e.end()) {
+              iter = e.find({uuu, v});
             }
             answer.push_back(iter->index);
           }
@@ -72,11 +72,11 @@ struct Graph {
 
   int n;
   int m;
-  std::vector<std::set<int>> ggg;
+  std::vector<std::set<int>> g;
   std::vector<bool> used;
-  std::vector<int> hhh;
-  std::vector<int> ddd;
-  std::set<Pair> eee;
+  std::vector<int> h;
+  std::vector<int> d;
+  std::set<Pair> e;
   std::vector<int> answer;
   std::set<Pair> doubles;
 };
