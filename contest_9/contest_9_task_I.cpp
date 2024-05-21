@@ -4,7 +4,8 @@
 #include <vector>
 
 
-struct Graph {
+class Graph {
+ public:
   Graph(int n, int m) : n(n), m(m) {
     used.resize(n + m, false);
     g.resize(n + m);
@@ -14,11 +15,11 @@ struct Graph {
     g[v].insert(to);
   }
 
-  void Dfs(int v, const std::vector<std::set<int>>& g) {
+  void Dfs(int v) {
     used[v] = true;
     for (int u : g[v]) {
       if (!used[u]) {
-        Dfs(u, g);
+        Dfs(u);
       }
     }
   }
@@ -38,7 +39,7 @@ struct Graph {
 
     for (int i = 0; i != m; ++i) {
       if (!matching[i] && !used[i]) {
-        Dfs(i, g);
+        Dfs(i);
       }
     }
     std::vector<int> left;
@@ -63,6 +64,7 @@ struct Graph {
     }
   }
 
+ private:
   int n;
   int m;
   std::vector<bool> used;
