@@ -18,12 +18,11 @@ class Flow {
     ll cost = 0;
   };
  public:
-  explicit Flow(ll n) : n(n) {
-    g.resize(n);
-    parent.resize(n);
-    d0.resize(n, cInf);
-    pot.resize(n, cInf);
-  }
+  explicit Flow(ll n) : n(n),
+                        g(n),
+                        parent(n),
+                        d0(n, cInf),
+                        pot(n, cInf) {}
 
   void AddEdge(ll v, ll u, ll c, ll cost) {
     g[v].push_back(static_cast<ll>(edges.size()));
