@@ -3,24 +3,25 @@
 #include <set>
 #include <vector>
 
-struct Pair {
-  int u = 0;
-  int v = 0;
-  int index = 0;
-
-  bool operator==(Pair& other) const {
-    return (u == other.u && v == other.v);
-  }
-
-  bool operator<(const Pair& other) const {
-    if (u == other.u) {
-      return v < other.v;
-    }
-    return u < other.u;
-  }
-};
-
 class Graph {
+ private:
+  struct Edge {
+    int u = 0;
+    int v = 0;
+    int index = 0;
+
+    bool operator==(Edge& other) const {
+      return (u == other.u && v == other.v);
+    }
+
+    bool operator<(const Edge& other) const {
+      if (u == other.u) {
+        return v < other.v;
+      }
+      return u < other.u;
+    }
+  };
+
  public:
   Graph(int n, int m) : n(n), m(m) {
     g.resize(n + 1);
@@ -81,9 +82,9 @@ class Graph {
   std::vector<bool> used;
   std::vector<int> h;
   std::vector<int> d;
-  std::set<Pair> e;
+  std::set<Edge> e;
   std::vector<int> answer;
-  std::set<Pair> doubles;
+  std::set<Edge> doubles;
 };
 
 
