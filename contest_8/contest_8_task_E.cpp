@@ -5,10 +5,12 @@
 const int cInf = 100'000;
 std::vector<bool> used;
 
-struct Graph {
+class Graph {
+ public:
   void AddEdge(int u, int v, int w) {
     edges.push_back({u, v, w});
   }
+
   std::vector<int> FordBellman(int n0, int s) {
     std::vector<int> answer(n0, cInf);
     std::vector<int> prev(n0, -1);
@@ -55,9 +57,7 @@ struct Graph {
   std::vector<std::vector<int>> edges;
 };
 
-
-
-signed main() {
+int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
