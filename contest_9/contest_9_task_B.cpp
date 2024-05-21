@@ -1,14 +1,12 @@
 #include <algorithm>
 #include <iostream>
+#include <set>
 #include <vector>
 
 const int cMaxN = 100'000;
 
-struct DSU {
-  DSU(int m) {
-    edges.resize(m);
-  }
-
+class DSU {
+ private:
   struct Edge {
     int b;
     int e;
@@ -16,6 +14,13 @@ struct DSU {
 
     bool operator<(const Edge& other) const { return w < other.w; }
   };
+
+ public:
+  DSU(int m) : m(m) {}
+
+  void AddEdge(int b, int e, int w) {
+    edges.insert({b, e, w});
+  }
 
   int Head(int v) { return (parent[v] == v) ? v : parent[v] = Head(parent[v]); }
 
@@ -35,7 +40,20 @@ struct DSU {
       weights[i] = 1;
     }
   }
-  std::vector<Edge> edges;
+
+  int MST() {
+    int answer = 0;
+    for (auto& [b, e, w] : edges) {
+      if (Head(b) != Head(e)) {
+        Unite(b, e);
+        answer += w;
+      }
+    }
+  }
+
+ private:
+  int m;
+  std::set<Edge> edges;
   int parent[cMaxN];
   int weights[cMaxN];
 };
@@ -49,17 +67,13 @@ int main() {
   int m;
   std::cin >> n >> m;
   DSU g = DSU(m);
-  for (auto& [b, e, w] : g.edges) {
+  for (int i = 0; i != m; ++i) {
+    int b;
+    int e;
+    int w;
     std::cin >> b >> e >> w;
+    g.AddEdge(b, e, w);
   }
   g.Initialize();
-  std::sort(g.edges.begin(), g.edges.end());
-  int answer = 0;
-  for (auto& [b, e, w] : g.edges) {
-    if (g.Head(b) != g.Head(e)) {
-      g.Unite(b, e);
-      answer += w;
-    }
-  }
-  std::cout << answer;
+  std::cout << g.MST();
 }
