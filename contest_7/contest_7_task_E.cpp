@@ -20,7 +20,8 @@ struct Pair {
   }
 };
 
-struct Graph {
+class Graph {
+ public:
   Graph(int n, int m) : n(n), m(m) {
     g.resize(n + 1);
     used.resize(n + 1);
@@ -47,20 +48,20 @@ struct Graph {
       h[v] = h[p] + 1;
     }
     d[v] = h[v];
-    for (int uuu : g[v]) {
-      if (uuu != p) {
-        if (used[uuu]) {
-          d[v] = std::min(d[v], h[uuu]);
+    for (int u : g[v]) {
+      if (u != p) {
+        if (used[u]) {
+          d[v] = std::min(d[v], h[u]);
         } else {
-          Dfs(uuu, v);
-          d[v] = std::min(d[v], d[uuu]);
-          if (h[v] < d[uuu]) {
-            if (doubles.contains({uuu, v}) || doubles.contains({v, uuu})) {
+          Dfs(u, v);
+          d[v] = std::min(d[v], d[u]);
+          if (h[v] < d[u]) {
+            if (doubles.contains({u, v}) || doubles.contains({v, u})) {
               continue;
             }
-            auto iter = e.find({v, uuu});
+            auto iter = e.find({v, u});
             if (iter == e.end()) {
-              iter = e.find({uuu, v});
+              iter = e.find({u, v});
             }
             answer.push_back(iter->index);
           }
@@ -68,8 +69,12 @@ struct Graph {
       }
     }
   }
-
-
+  bool IsUsed(int v) const { return used[v]; }
+  std::vector<int> GetSortedAnswer() {
+    std::sort(answer.begin(), answer.end());
+    return answer;
+  }
+ private:
   int n;
   int m;
   std::vector<std::set<int>> g;
@@ -94,13 +99,13 @@ int main() {
     g.AddEdge(u, v, i);
   }
   for (int v = 1; v != n + 1; ++v) {
-    if (!g.used[v]) {
+    if (!g.IsUsed(v)) {
       g.Dfs(v);
     }
   }
-  std::cout << g.answer.size() << "\n";
-  std::sort(g.answer.begin(), g.answer.end());
-  for (int xxx : g.answer) {
-    std::cout << xxx << " ";
+  auto answer = g.GetSortedAnswer();
+  std::cout << answer.size() << "\n";
+  for (int index : answer) {
+    std::cout << index << " ";
   }
 }
